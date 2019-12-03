@@ -1,0 +1,51 @@
+<form class="padding">
+    <mat-form-field class="full-width">
+        <input matInput placeholder="Filter by name">
+    </mat-form-field>
+    <mat-form-field class="full-width">
+        <mat-chip-list #chipList aria-label="Category selection">
+            <mat-chip *ngFor="let filter of filters" selectable="false" removable="true"
+                (removed)="filterRemove(filter)">
+                {{filter.name}}
+                <mat-icon matChipRemove>cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="Filter by category" #category [formControl]="formControl" [matAutocomplete]="auto"
+                [matChipInputFor]="chipList" matChipInputAddOnBlur="true">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="filterSelected($event)">
+            <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                {{category.name}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+</form>
+<mat-progress-bar mode="indeterminate" *ngIf="showLoading"></mat-progress-bar>
+<mat-grid-list cols="2" rowHeight="120px">
+    <mat-grid-tile>
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Lorem ipsum dolor sit amet consectetur</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <mat-chip-list aria-label="Fish selection">
+                    <mat-chip class="small-chip">One fish</mat-chip>
+                    <mat-chip>Two fish</mat-chip>
+                    <mat-chip color="primary" selected>Primary fish</mat-chip>
+                    <mat-chip color="accent" selected>Accent fish</mat-chip>
+                </mat-chip-list>
+            </mat-card-content>
+        </mat-card>
+
+    </mat-grid-tile>
+    <mat-grid-tile>
+
+        <div [class.mat-elevation-z2]="!isActive" [class.mat-elevation-z8]="isActive"
+        style="width: 80%;margin: 10%;">
+
+            holi
+        </div>
+
+    </mat-grid-tile>
+    <mat-grid-tile>3</mat-grid-tile>
+    <mat-grid-tile>4</mat-grid-tile>
+</mat-grid-list>
