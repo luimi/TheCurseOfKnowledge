@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-
+import {MatDialog} from '@angular/material/dialog';
+import Parse from 'parse';
+import { LoginComponent } from './login/login.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -7,4 +9,21 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'TheCurseOfKnowledge';
+  isLogedIn = false;
+  constructor(public dialog: MatDialog){
+    Parse.initialize("tCbO3YhTW1fNFp6tC6rIy2IqR1dL6unVs4NsDx7Q", 
+    "ZRTekpfa2Aacehyd2c3AVsMZNirugnTGI7DDaV7O");
+    Parse.serverURL = 'https://parseapi.back4app.com/';
+    this.isLogedIn = Parse.User.current()!=undefined;
+  }
+  login(){
+    this.dialog.open(LoginComponent, {
+      width: '250px',
+      data: {}
+    });
+  }
+  async logout(){
+    await Parse.User.logOut();
+    this.isLogedIn = Parse.User.current()!=undefined;
+  }
 }

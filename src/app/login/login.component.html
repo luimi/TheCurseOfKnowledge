@@ -1,0 +1,9 @@
+<mat-form-field class="full-width">
+    <input matInput placeholder="User" [(ngModel)]="auth.user">
+</mat-form-field>
+
+<mat-form-field class="full-width">
+    <input matInput placeholder="Password" type="password" [(ngModel)]="auth.pass">
+</mat-form-field>
+
+<button mat-raised-button color="primary" (click)="login()">Login</button>

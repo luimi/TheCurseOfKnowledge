@@ -1,3 +1,6 @@
 .small-chip{
     font-size: xx-small;
 }
+mat-card{
+    width: 80%;
+}
