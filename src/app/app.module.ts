@@ -15,18 +15,34 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatListModule } from '@angular/material/list';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatDividerModule} from '@angular/material/divider';
+
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
 import { MainComponent } from './main/main.component';
 import { AppRoutingModule } from './app-routing.module';
 import { LoginComponent } from './login/login.component';
 import { ManagerComponent } from './manager/manager.component';
+import { MatTabsModule } from '@angular/material/tabs';
+import { ToolsComponent } from './manager/tools/tools.component';
+import { ConfirmDialogComponent } from './manager/confirm-dialog/confirm-dialog.component';
+import { CategoriesComponent } from './manager/categories/categories.component';
+import { SuggestionsComponent } from './manager/suggestions/suggestions.component';
+import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainComponent,
     LoginComponent,
-    ManagerComponent
+    ManagerComponent,
+    ToolsComponent,
+    ConfirmDialogComponent,
+    CategoriesComponent,
+    SuggestionsComponent,
+    SuggestionDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,11 +61,16 @@ import { ManagerComponent } from './manager/manager.component';
     MatDialogModule,
     MatButtonModule,
     MatSnackBarModule,
+    MatTabsModule,
+    MatListModule,
+    MatSidenavModule,
+    MatDividerModule,
+    FlexLayoutModule,
     LayoutModule,
     AppRoutingModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent]
+  entryComponents: [LoginComponent,ConfirmDialogComponent,SuggestionDialogComponent]
 })
 export class AppModule { }

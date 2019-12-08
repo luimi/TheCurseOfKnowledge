@@ -1,1 +1,11 @@
-<p>manager works!</p>
+<mat-tab-group>
+  <mat-tab label="Tools">
+    <app-tools [categories]="categories"></app-tools>
+  </mat-tab>
+  <mat-tab label="Categories">
+    <app-categories [categories]="categories" (refresh)="getCategories()"></app-categories>
+  </mat-tab>
+  <mat-tab label="Suggestions"> 
+    <app-suggestions></app-suggestions>
+  </mat-tab>
+</mat-tab-group>

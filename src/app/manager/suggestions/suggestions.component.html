@@ -1,0 +1,8 @@
+<div class="padding">
+    <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let suggestion of suggestions">
+            <p fxFlex>{{suggestion.get('content')}}</p>
+            <mat-icon (click)="delete(suggestion)">delete</mat-icon>
+        </mat-list-item>
+    </mat-list>
+</div>

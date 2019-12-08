@@ -5,6 +5,8 @@ import { map, startWith } from 'rxjs/operators';
 import { MatAutocomplete } from '@angular/material/autocomplete';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import Parse from 'parse';
+import { MatDialog } from '@angular/material/dialog';
+import { SuggestionDialogComponent } from '../suggestion-dialog/suggestion-dialog.component';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -28,7 +30,7 @@ export class MainComponent implements OnInit {
   columnsGrid = 2;
   tools = [];
   timer;
-  constructor(private breakpointObserver: BreakpointObserver) {
+  constructor(private breakpointObserver: BreakpointObserver, public dialog:MatDialog) {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
       map((input: any | null) => input ? this._filter(input) : this.categories.slice()));
@@ -73,6 +75,7 @@ export class MainComponent implements OnInit {
   }
   async getTools() {
     let query = new Parse.Query('Tool');
+    query.descending("createdAt");
     if (this.filter.name) {
       query.contains('search', this.filter.name.toLowerCase());
     }
@@ -80,5 +83,11 @@ export class MainComponent implements OnInit {
       query.containsAll('categories', this.filter.chips);
     }
     this.tools = await query.find();
+  }
+  open(tool){
+    window.open(tool.get("url"), "_blank");
+  }
+  suggestion(){
+    this.dialog.open(SuggestionDialogComponent);
   }
 }

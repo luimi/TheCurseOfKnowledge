@@ -23,15 +23,21 @@
 <mat-grid-list [cols]="columnsGrid" rowHeight="120px">
     <mat-grid-tile rowspan="1" *ngFor="let tool of tools">
         <mat-card>
-            <mat-card-header>
+            <mat-card-header (click)="open(tool)">
                 <mat-card-title>{{tool.get('name')}}</mat-card-title>
             </mat-card-header>
             <mat-card-content>
                 <mat-chip-list aria-label="Fish selection">
-                    <mat-chip class="small-chip" *ngFor="let category of tool.get('categories')">{{category.get('name')}}</mat-chip>
+                    <mat-chip class="small-chip" *ngFor="let category of tool.get('categories')">
+                        {{category.get('name')}}</mat-chip>
                 </mat-chip-list>
             </mat-card-content>
         </mat-card>
 
     </mat-grid-tile>
 </mat-grid-list>
+<div class="fab-container">
+    <button mat-fab aria-label="suggestion" (click)="suggestion()">
+        <mat-icon>textsms</mat-icon>
+    </button>
+</div>

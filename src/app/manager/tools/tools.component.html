@@ -1,0 +1,48 @@
+
+<div fxLayout="row" fxLayout.lt-md="column">
+    
+    <div fxFlex="70" class="form">
+        <mat-toolbar color="primary">
+            <span fxFlex>{{currentTool.saved?'Edit':'New'}} Tool</span>
+            <mat-icon (click)="newTool()">add_circle_outline</mat-icon>
+        </mat-toolbar>
+        <div fxLayout="column" class="padding">
+            <mat-form-field>
+                <input matInput placeholder="Name" fxFlex [(ngModel)]="currentTool.name">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput placeholder="URL" fxFlex [(ngModel)]="currentTool.url">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+                <mat-chip-list #chipList aria-label="Category selection">
+                    <mat-chip *ngFor="let filter of currentTool.categories" selectable="false" removable="true"
+                        (removed)="filterRemove(filter)">
+                        {{filter.get('name')}}
+                        <mat-icon matChipRemove>cancel</mat-icon>
+                    </mat-chip>
+                    <input placeholder="Filter by category" #category [formControl]="formControl"
+                        [matAutocomplete]="auto" [matChipInputFor]="chipList" matChipInputAddOnBlur="true">
+                </mat-chip-list>
+                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="filterSelected($event)">
+                    <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
+                        {{category.get('name')}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="save()">Save</button>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <div fxLayout="column" fxFlex="30" class="padding">
+            <mat-form-field>
+                <input matInput placeholder="Search by name" [(ngModel)]="filter.name" (ngModelChange)="searchChange()">
+            </mat-form-field>
+            <mat-list role="list">
+                <mat-list-item role="listitem" *ngFor="let tool of tools">
+                    <p fxFlex>{{tool.get('name')}}</p>
+                    <mat-icon (click)="edit(tool)">edit</mat-icon>
+                    <mat-icon (click)="delete(tool)">delete</mat-icon>
+                </mat-list-item>
+            </mat-list>
+        </div>
+</div>

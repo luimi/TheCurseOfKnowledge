@@ -17,9 +17,9 @@ export class AppComponent {
     this.isLogedIn = Parse.User.current()!=undefined;
   }
   login(){
-    this.dialog.open(LoginComponent, {
-      width: '250px',
-      data: {}
+    const dialogRef = this.dialog.open(LoginComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      this.isLogedIn = Parse.User.current()!=undefined;
     });
   }
   async logout(){

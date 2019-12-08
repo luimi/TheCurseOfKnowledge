@@ -1,0 +1,11 @@
+<h1 mat-dialog-title>suggestion</h1>
+<div mat-dialog-content fxLayout="column">
+  <p>Make a suggestion of any tool we are missing</p>
+  <mat-form-field fxFlex>
+        <textarea matInput placeholder="Leave that exciting app" [(ngModel)]="content"></textarea>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button (click)="send()" color="primary" cdkFocusInitial>Send</button>
+</div>

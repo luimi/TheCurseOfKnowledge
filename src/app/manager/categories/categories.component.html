@@ -1,0 +1,12 @@
+<div class="padding" fxLayout="column">
+    <mat-form-field fxFlex>
+        <input matInput placeholder="Name" [(ngModel)]="name">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="save()">Save</button>
+    <mat-list role="list">
+        <mat-list-item role="listitem" *ngFor="let category of categories">
+            <p fxFlex>{{category.get('name')}}</p>
+            <mat-icon (click)="delete(category)">delete</mat-icon>
+        </mat-list-item>
+    </mat-list>
+</div>
