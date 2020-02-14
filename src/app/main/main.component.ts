@@ -74,8 +74,10 @@ export class MainComponent implements OnInit {
     this.categories = await new Parse.Query('Category').find();
   }
   async getTools() {
+    this.showLoading = true;
     let query = new Parse.Query('Tool');
     query.descending("createdAt");
+    query.limit(20);
     if (this.filter.name) {
       query.contains('search', this.filter.name.toLowerCase());
     }
@@ -83,6 +85,7 @@ export class MainComponent implements OnInit {
       query.containsAll('categories', this.filter.chips);
     }
     this.tools = await query.find();
+    this.showLoading = false;
   }
   open(tool){
     window.open(tool.get("url"), "_blank");
