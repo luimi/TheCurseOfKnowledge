@@ -20,14 +20,6 @@ export class MainComponent implements OnInit {
   filter:any = {chips:[]};
   formControl = new FormControl();
   showLoading = false;
-  screenLimits = [
-    { limit: '(min-width: 320px) and (max-width: 480px)', size: 1 },
-    { limit: '(min-width: 481px) and (max-width: 767px)', size: 1 },
-    { limit: '(min-width: 768px) and (max-width: 1024px)', size: 2 },
-    { limit: '(min-width: 1025px) and (max-width: 1280px)', size: 3 },
-    { limit: '(min-width: 1281px)', size: 4 },
-  ];
-  columnsGrid = 2;
   tools = [];
   timer;
   constructor(private breakpointObserver: BreakpointObserver, public dialog:MatDialog) {
@@ -40,7 +32,6 @@ export class MainComponent implements OnInit {
     return this.categories.filter(category => category.get('name').toLowerCase().indexOf(filterValue) === 0);
   }
   ngOnInit() {
-    this.getColumns();
     this.getCategories();
     this.getTools();
   }
@@ -50,8 +41,8 @@ export class MainComponent implements OnInit {
     this.filter.chips.splice(index, 1);
     this.getTools();
   }
-  filterSelected(event) {
-    this.filter.chips.push(event.option.value);
+  filterSelected(obj) {
+    this.filter.chips.push(obj);
     this.filterInput.nativeElement.value = '';
     this.formControl.setValue(null);
     this.getTools();
@@ -63,21 +54,14 @@ export class MainComponent implements OnInit {
     }
     this.timer = setTimeout(()=>{this.getTools();}, 1000);
   }
-  getColumns() {
-    for (let i = 0; i < this.screenLimits.length; i++) {
-      if (this.breakpointObserver.isMatched(this.screenLimits[i].limit)) {
-        this.columnsGrid = this.screenLimits[i].size;
-      }
-    }
-  }
   async getCategories() {
-    this.categories = await new Parse.Query('Category').find();
+    this.categories = await new Parse.Query('Category').ascending('name').find();
   }
   async getTools() {
     this.showLoading = true;
     let query = new Parse.Query('Tool');
     query.descending("createdAt");
-    query.limit(20);
+    query.limit(40);
     if (this.filter.name) {
       query.contains('search', this.filter.name.toLowerCase());
     }

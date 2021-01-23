@@ -1,8 +1,8 @@
 <div class="padding">
-    <mat-form-field class="full-width">
+    <mat-form-field>
         <input matInput placeholder="Filter by name" [(ngModel)]="filter.name" (ngModelChange)="inputChange()">
     </mat-form-field>
-    <mat-form-field class="full-width">
+    <mat-form-field>
         <mat-chip-list #chipList aria-label="Category selection">
             <mat-chip *ngFor="let filter of filter.chips" selectable="false" removable="true"
                 (removed)="filterRemove(filter)">
@@ -12,7 +12,7 @@
             <input placeholder="Filter by category" #category [formControl]="formControl" [matAutocomplete]="auto"
                 [matChipInputFor]="chipList" matChipInputAddOnBlur="true">
         </mat-chip-list>
-        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="filterSelected($event)">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="filterSelected($event.option.value)">
             <mat-option *ngFor="let category of filteredCategories | async" [value]="category">
                 {{category.get('name')}}
             </mat-option>
@@ -20,19 +20,35 @@
     </mat-form-field>
 </div>
 <mat-progress-bar mode="indeterminate" *ngIf="showLoading"></mat-progress-bar>
-<div class="item-list">
-    <div *ngFor="let tool of tools">
-        <mat-card>
-            <mat-card-header (click)="open(tool)">
-                <mat-card-title>{{tool.get('name')}}</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <mat-chip-list aria-label="Fish selection">
-                    <mat-chip class="small-chip" *ngFor="let category of tool.get('categories')">
-                        {{category.get('name')}}</mat-chip>
-                </mat-chip-list>
-            </mat-card-content>
-        </mat-card>
+<div class=".content">
+    <div class="row">
+        <div class="category">
+            <mat-card>
+                <mat-card-header>
+                    <mat-card-title>Categories</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-chip-list>
+                        <mat-chip *ngFor="let category of categories" (click)="filterSelected(category)" selected color="accent" class="small-chip">{{category.get('name')}}</mat-chip>
+                    </mat-chip-list>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="tools">
+            <div class="grid-tools">
+                <mat-card *ngFor="let tool of tools">
+                    <mat-card-header (click)="open(tool)">
+                        <mat-card-title><img [src]="'https://www.google.com/s2/favicons?domain='+tool.get('url')"> {{tool.get('name')}}</mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <mat-chip-list aria-label="category tool">
+                            <mat-chip class="small-chip" *ngFor="let category of tool.get('categories')" selected (click)="filterSelected(category)">
+                                {{category.get('name')}}</mat-chip>
+                        </mat-chip-list>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
     </div>
 </div>
 <div class="fab-container">
