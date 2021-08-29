@@ -45,8 +45,7 @@ mat-card {
     width: 100%;
   }
   .category {
-    width: 100%;
-    display: table-row;
+    display: none;
   }
   .tools {
     width: 100%;
