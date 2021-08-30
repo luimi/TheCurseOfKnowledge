@@ -29,6 +29,14 @@
                     </mat-option>
                 </mat-autocomplete>
             </mat-form-field>
+            <mat-form-field>
+                <mat-label>Plan</mat-label>
+                <mat-select [(ngModel)]="currentTool.plan">
+                  <mat-option *ngFor="let plan of plans" [value]="plan">
+                    {{plan}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
             <button mat-raised-button color="primary" (click)="save()">Save</button>
         </div>
     </div>

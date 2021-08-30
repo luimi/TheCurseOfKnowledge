@@ -23,6 +23,7 @@ export class ToolsComponent implements OnInit {
   filter: any = { name: '', chips: [] };
   formControl = new FormControl();
   currentTool: any = {};
+  plans = ["Free","paid","Freemium","Trial"];
   constructor(public dialog: MatDialog, public utils: UtilsService) {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
@@ -73,6 +74,7 @@ export class ToolsComponent implements OnInit {
     this.currentTool.name = tool.get('name');
     this.currentTool.url = tool.get('url');
     this.currentTool.categories = tool.get('categories');
+    this.currentTool.plan = tool.get('plan');
     this.currentTool.saved = tool;
   }
   newTool() {
@@ -92,6 +94,7 @@ export class ToolsComponent implements OnInit {
       tool.set("search", this.currentTool.name.toLowerCase());
       tool.set("url", this.currentTool.url);
       tool.set("categories", this.currentTool.categories);
+      tool.set("plan", this.currentTool.plan);
       //this.currentTool.saved.set("name",this.currentTool.name);
       await tool.save();
       this.newTool();

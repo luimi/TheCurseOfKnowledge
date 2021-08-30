@@ -18,6 +18,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatDividerModule} from '@angular/material/divider';
+import { MatSelectModule } from '@angular/material/select';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -31,6 +32,7 @@ import { ConfirmDialogComponent } from './manager/confirm-dialog/confirm-dialog.
 import { CategoriesComponent } from './manager/categories/categories.component';
 import { SuggestionsComponent } from './manager/suggestions/suggestions.component';
 import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog.component';
+
 
 @NgModule({
   declarations: [
@@ -65,6 +67,7 @@ import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog
     MatListModule,
     MatSidenavModule,
     MatDividerModule,
+    MatSelectModule,
     FlexLayoutModule,
     LayoutModule,
     AppRoutingModule

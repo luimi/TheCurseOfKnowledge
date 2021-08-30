@@ -39,6 +39,7 @@
                 <mat-card *ngFor="let tool of tools">
                     <mat-card-header (click)="open(tool)">
                         <mat-card-title><img [src]="'https://www.google.com/s2/favicons?domain='+tool.get('url')"> {{tool.get('name')}}</mat-card-title>
+                        <mat-chip class="small-chip" color="accent" selected *ngIf="tool.get('plan')">{{tool.get('plan')}}</mat-chip>
                     </mat-card-header>
                     <mat-card-content>
                         <mat-chip-list aria-label="category tool">
