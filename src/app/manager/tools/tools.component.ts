@@ -61,7 +61,12 @@ export class ToolsComponent implements OnInit {
   }
   private _filter(value): any[] {
     let filterValue = ((value instanceof Object) ? value.get('name') : value).toLowerCase();
-    return this.categories.filter(category => category.get('name').toLowerCase().indexOf(filterValue) === 0);
+    return this.categories.filter(category => {
+      let startWith = category.get('name').toLowerCase().indexOf(filterValue) === 0
+      let mappedSelected = this.filter.chips.map((val,i,a) => val.get('name').toLowerCase());
+      let alreadySelected = !mappedSelected.includes(category.get('name').toLowerCase())
+      return startWith && alreadySelected
+    });
   }
   edit(tool) {
     this.newTool();
