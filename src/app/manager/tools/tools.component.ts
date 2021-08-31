@@ -28,7 +28,6 @@ export class ToolsComponent implements OnInit {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
       map((input: any | null) => input ? this._filter(input) : this.categories.slice()));
-
   }
 
   ngOnInit() {
@@ -52,7 +51,7 @@ export class ToolsComponent implements OnInit {
     this.timer = setTimeout(() => { this.search(); }, 1000);
   }
   filterRemove(filter) {
-    const index = this.filter.chips.findIndex(i => i.get('name') === filter.get('name'));
+    const index = this.currentTool.categories.findIndex(i => i.get('name') === filter.get('name'));
     this.currentTool.categories.splice(index, 1);
   }
   filterSelected(event) {
@@ -64,7 +63,7 @@ export class ToolsComponent implements OnInit {
     let filterValue = ((value instanceof Object) ? value.get('name') : value).toLowerCase();
     return this.categories.filter(category => {
       let startWith = category.get('name').toLowerCase().indexOf(filterValue) === 0
-      let mappedSelected = this.filter.chips.map((val,i,a) => val.get('name').toLowerCase());
+      let mappedSelected = this.currentTool.categories.map((val,i,a) => val.get('name').toLowerCase());
       let alreadySelected = !mappedSelected.includes(category.get('name').toLowerCase())
       return startWith && alreadySelected
     });
