@@ -16,6 +16,7 @@ export class ManagerComponent implements OnInit {
   }
   async getCategories() {
     this.categories = await new Parse.Query('Category')
+      .limit(1000)
       .ascending('name')
       .find();
   }

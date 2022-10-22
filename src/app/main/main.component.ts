@@ -60,7 +60,7 @@ export class MainComponent implements OnInit {
     this.timer = setTimeout(()=>{this.getTools();}, 1000);
   }
   async getCategories() {
-    this.categories = await new Parse.Query('Category').ascending('name').find();
+    this.categories = await new Parse.Query('Category').limit(1000).ascending('name').find();
   }
   async getTools() {
     this.showLoading = true;
