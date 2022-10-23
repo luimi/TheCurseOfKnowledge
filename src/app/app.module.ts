@@ -16,9 +16,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatListModule } from '@angular/material/list';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatDividerModule} from '@angular/material/divider';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -32,6 +33,7 @@ import { ConfirmDialogComponent } from './manager/confirm-dialog/confirm-dialog.
 import { CategoriesComponent } from './manager/categories/categories.component';
 import { SuggestionsComponent } from './manager/suggestions/suggestions.component';
 import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog.component';
+import { HttpClientModule } from '@angular/common/http';
 
 
 @NgModule({
@@ -68,12 +70,14 @@ import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog
     MatSidenavModule,
     MatDividerModule,
     MatSelectModule,
+    MatExpansionModule,
     FlexLayoutModule,
     LayoutModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent,ConfirmDialogComponent,SuggestionDialogComponent]
+  entryComponents: [LoginComponent, ConfirmDialogComponent, SuggestionDialogComponent]
 })
 export class AppModule { }
