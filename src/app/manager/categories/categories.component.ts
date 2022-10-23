@@ -20,11 +20,11 @@ export class CategoriesComponent implements OnInit {
   }
   async save() {
     if (!this.name) {
-      this.showSnackBar("Debe escribir un nombre");
+      this.showSnackBar("Category name is missing");
       return
     }
     if (this.isRegistered(this.name)) {
-      this.showSnackBar("Existe una categoria con el mismo nombre");
+      this.showSnackBar("A category with the same name is already registered");
       return
     }
     const Category = Parse.Object.extend('Category');
