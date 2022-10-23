@@ -7,10 +7,11 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import Parse from 'parse';
 import { MatDialog } from '@angular/material/dialog';
 import { SuggestionDialogComponent } from '../suggestion-dialog/suggestion-dialog.component';
+import { UtilsService } from '../utils.service';
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  styleUrls: ['./main.component.scss']
 })
 export class MainComponent implements OnInit {
   @ViewChild('category', { static: false }) filterInput: ElementRef<HTMLInputElement>;
@@ -22,10 +23,12 @@ export class MainComponent implements OnInit {
   showLoading = false;
   tools = [];
   timer;
-  constructor(private breakpointObserver: BreakpointObserver, public dialog:MatDialog) {
+  background;
+  constructor(private breakpointObserver: BreakpointObserver, public dialog:MatDialog, private utils: UtilsService) {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
       map((input: any | null) => input ? this._filter(input) : this.categories.slice()));
+    this.getBackground();
   }
   private _filter(value): any[] {
     let filterValue = ((value instanceof Object) ? value.get('name') : value).toLowerCase();
@@ -81,5 +84,9 @@ export class MainComponent implements OnInit {
   }
   suggestion(){
     this.dialog.open(SuggestionDialogComponent);
+  }
+  async getBackground() {
+    this.background = await this.utils.getUnsplashRandomImage();
+    console.log(this.background);
   }
 }
