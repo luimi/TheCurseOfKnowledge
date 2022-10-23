@@ -1,0 +1,11 @@
+.logo {
+    position: relative;
+    height: 100px;
+}
+.logo mat-icon {
+    position: absolute;
+    top: 15%;
+    left: 40%;
+    transform: translate(0%, 0%);
+    font-size: 80px;
+}
