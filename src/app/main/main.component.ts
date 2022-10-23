@@ -79,8 +79,9 @@ export class MainComponent implements OnInit {
     this.tools = await query.find();
     this.showLoading = false;
   }
-  open(tool){
+  async open(tool){
     window.open(tool.get("url"), "_blank");
+    await Parse.Cloud.run("addView", { "id": tool.id });
   }
   suggestion(){
     this.dialog.open(SuggestionDialogComponent);
