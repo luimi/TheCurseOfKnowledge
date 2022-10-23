@@ -88,6 +88,5 @@ export class MainComponent implements OnInit {
   }
   async getBackground() {
     this.background = await this.utils.getUnsplashRandomImage();
-    console.log(this.background);
   }
 }
