@@ -28,7 +28,7 @@
                 </mat-select>
             </mat-form-field>
             <mat-progress-bar mode="indeterminate" *ngIf="showLoading"></mat-progress-bar>
-            <mat-accordion>
+            <mat-accordion  [hidden]="filterType.value === 'name'">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title>

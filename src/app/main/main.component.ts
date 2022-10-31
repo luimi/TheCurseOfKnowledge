@@ -16,6 +16,7 @@ import { UtilsService } from '../utils.service';
 export class MainComponent implements OnInit {
   @ViewChild('category', { static: false }) filterInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
+  @ViewChild('filterType', { static: false }) filterType;
   categories = [];
   filteredCategories: Observable<any[]>;
   filter:any = {chips:[]};
@@ -65,15 +66,15 @@ export class MainComponent implements OnInit {
     this.categories = await new Parse.Query('Category').limit(1000).ascending('name').find();
   }
   async getTools() {
+    if(this.filterType) console.log(this.filterType.value);
     this.showLoading = true;
     let query = new Parse.Query('Tool');
     query.descending("createdAt");
     query.limit(40);
-    if (this.filter.name) {
-      query.contains('search', this.filter.name.toLowerCase());
-    }
-    if(this.filter.chips.length>0){
+    if(this.filterType && this.filterType.value==='category' && this.filter.chips.length>0){
       query.containsAll('categories', this.filter.chips);
+    } else if(this.filterType && this.filterType.value==='name' && this.filter.name) {
+      query.contains('search', this.filter.name.toLowerCase());
     }
     this.tools = await query.find();
     this.showLoading = false;
