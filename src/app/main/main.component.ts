@@ -28,7 +28,6 @@ export class MainComponent implements OnInit {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
       map((input: any | null) => input ? this._filter(input) : this.categories.slice()));
-    this.getBackground();
   }
   private _filter(value): any[] {
     let filterValue = ((value instanceof Object) ? value.get('name') : value).toLowerCase();
@@ -85,8 +84,5 @@ export class MainComponent implements OnInit {
   }
   suggestion(){
     this.dialog.open(SuggestionDialogComponent);
-  }
-  async getBackground() {
-    this.background = await this.utils.getUnsplashRandomImage();
   }
 }
