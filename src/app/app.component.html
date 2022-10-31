@@ -5,5 +5,8 @@
   <button mat-button (click)="login()" *ngIf="!isLogedIn">Login <mat-icon>person</mat-icon></button>
   <button mat-button routerLink="/manage" *ngIf="isLogedIn">Manage <mat-icon>settings</mat-icon></button>
   <button mat-button (click)="logout()" *ngIf="isLogedIn">Logout <mat-icon>logout</mat-icon></button>
+  <button mat-button (click)="github()"><img src="/assets/github.svg" class="icon"></button>
+  <button mat-button (click)="lui2mi()">Lui2mi</button>
+  
 </mat-toolbar>
 <router-outlet></router-outlet>

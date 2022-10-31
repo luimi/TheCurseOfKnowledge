@@ -26,4 +26,10 @@ export class AppComponent {
     await Parse.User.logOut();
     this.isLogedIn = Parse.User.current()!=undefined;
   }
+  github(){
+    window.open("https://github.com/luimi/TheCurseOfKnowledge", "_blank");
+  }
+  lui2mi(){
+    window.open("https://lui2mi.wordpress.com/", "_blank");
+  }
 }

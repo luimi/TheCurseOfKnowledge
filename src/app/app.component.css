@@ -1,0 +1,5 @@
+.icon {
+    width: 35px;
+    height: 35px;
+    filter: invert(97%) sepia(100%) saturate(12%) hue-rotate(197deg) brightness(105%) contrast(104%);
+}
