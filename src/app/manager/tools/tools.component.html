@@ -14,9 +14,9 @@
                 <input matInput placeholder="URL" fxFlex [(ngModel)]="currentTool.url">
             </mat-form-field>
             <mat-form-field class="full-width">
-                <mat-chip-list #chipList aria-label="Category selection">
+                <mat-chip-list #chipList aria-label="Category selection" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="swap($event)">
                     <mat-chip *ngFor="let filter of currentTool.categories" selectable="false" removable="true"
-                        (removed)="filterRemove(filter)">
+                        (removed)="filterRemove(filter)" cdkDrag>
                         {{filter.get('name')}}
                         <mat-icon matChipRemove>cancel</mat-icon>
                     </mat-chip>

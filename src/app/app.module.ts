@@ -20,6 +20,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
+import {DragDropModule} from '@angular/cdk/drag-drop';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { LayoutModule } from '@angular/cdk/layout';
@@ -73,6 +74,7 @@ import { HttpClientModule } from '@angular/common/http';
     MatExpansionModule,
     FlexLayoutModule,
     LayoutModule,
+    DragDropModule,
     AppRoutingModule,
     HttpClientModule
   ],

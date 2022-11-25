@@ -7,6 +7,8 @@ import Parse from 'parse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { UtilsService } from 'src/app/utils.service';
+import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+
 @Component({
   selector: 'app-tools',
   templateUrl: './tools.component.html',
@@ -108,5 +110,9 @@ export class ToolsComponent implements OnInit {
         this.search();
       }
     });
+  }
+  swap(evt){
+    moveItemInArray(this.currentTool.categories, evt.previousIndex, evt.currentIndex);
+    console.log(evt);
   }
 }
