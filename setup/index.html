@@ -1,0 +1,327 @@
+<html lang="en" ng-app="BlankApp">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet"
+        href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.css">
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.6/angular-messages.min.js"></script>
+
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.12/angular-material.min.js"></script>
+
+    <script src="https://npmcdn.com/parse/dist/parse.min.js"></script>
+
+    <style>
+        md-input-container {
+            margin-bottom: 0px
+        }
+    </style>
+</head>
+
+<body ng-cloak ng-controller="MainCtrl">
+    <md-toolbar md-theme="docs-dark">
+        <div class="md-toolbar-tools">
+            <h2 flex md-truncate>Initialize</h2>
+        </div>
+    </md-toolbar>
+
+    <div class="layout-padding md-inline-form">
+        <div layout="row" flex>
+            <md-switch ng-model="initialize.default" aria-label="Default" flex>
+                Use default user (admin:admin)
+            </md-switch>
+            <md-input-container>
+                <label>User name</label>
+                <input type="text" ng-model="initialize.user" ng-disabled="initialize.default">
+            </md-input-container>
+            <md-input-container>
+                <label>Password</label>
+                <input type="password" ng-model="initialize.password" ng-disabled="initialize.default">
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container flex>
+                <label>App ID</label>
+                <input ng-model="initialize.appid">
+            </md-input-container>
+            <md-input-container flex>
+                <label>JavaScript ID</label>
+                <input ng-model="initialize.jsid">
+            </md-input-container>
+        </div>
+        <div layout="row" flex>
+            <md-input-container class="md-block" flex>
+                <label>Server URL</label>
+                <input ng-model="initialize.url">
+            </md-input-container>
+            <md-button ng-click="initialize.start()" class="md-primary md-raised">Start</md-button>
+
+        </div>
+    </div>
+    <md-toolbar md-theme="docs-dark">
+        <div class="md-toolbar-tools">
+            <h2 flex md-truncate>Migrate</h2>
+        </div>
+    </md-toolbar>
+    <div layout="row" class="layout-padding">
+        <md-input-container class="md-block" flex>
+            <label>From server URL</label>
+            <input ng-model="migrate.from.url">
+        </md-input-container>
+    </div>
+    <div layout="row" class="layout-padding">
+        <md-input-container flex>
+            <label>From App ID</label>
+            <input ng-model="migrate.from.appid">
+        </md-input-container>
+        <md-input-container flex>
+            <label>From JavaScript ID</label>
+            <input ng-model="migrate.from.jsid">
+        </md-input-container>
+    </div>
+    <div layout="row" class="layout-padding">
+        <md-input-container class="md-block" flex>
+            <label>To server URL</label>
+            <input ng-model="migrate.to.url">
+        </md-input-container>
+    </div>
+    <div layout="row" class="layout-padding">
+        <md-input-container flex>
+            <label>To App ID</label>
+            <input ng-model="migrate.to.appid">
+        </md-input-container>
+        <md-input-container flex>
+            <label>To JavaScript ID</label>
+            <input ng-model="migrate.to.jsid">
+        </md-input-container>
+    </div>
+    <div layout="row" flex>
+        <md-button class="md-raised md-accent md-hue-3 md-block" aria-label="Migate" ng-click="migrate.start()">
+            <span>Migrate</span>
+        </md-button>
+    </div>
+    <md-toolbar md-theme="docs-dark">
+        <div class="md-toolbar-tools">
+
+            <h2 flex md-truncate>Logs</h2>
+            <md-button class="md-raised md-accent md-hue-3" aria-label="Clear" ng-click="logs.clear()">
+                <span>Clear</span>
+            </md-button>
+        </div>
+    </md-toolbar>
+
+    <md-list-item ng-repeat="log in logs.list">
+        <p> {{ log }} </p>
+    </md-list-item>
+
+    <script type="text/javascript">
+        angular.module('BlankApp', ['ngMaterial', 'ngMessages'])
+            .controller('MainCtrl', function ($scope) {
+                const connect = (url, appid, jsid) => {
+                    if (jsid)
+                        Parse.initialize(appid, jsid);
+                    else
+                        Parse.initialize(appid);
+                    Parse.serverURL = url
+                }
+                $scope.logs = { list: [] };
+                $scope.logs.clear = () => {
+                    $scope.logs.list = [];
+                }
+                $scope.initialize = {
+                    url: "",
+                    user: "admin",
+                    password: "admin",
+                    default: true,
+                    appid: "",
+                    jsid: undefined
+                }
+                $scope.initialize.start = async () => {
+                    localStorage.clear();
+                    $scope.logs.list.push("Started initialize app");
+
+                    // conectar al servidor
+                    connect($scope.initialize.url, $scope.initialize.appid, $scope.initialize.jsid)
+
+                    // consultar rol admin, si trae, mostrar error
+                    let adminRole = await new Parse.Query(Parse.Role)
+                        .equalTo("name", "Admin")
+                        .first()
+                    if (adminRole) {
+                        $scope.logs.list.push("Server already initialized, process canceled");
+                        return
+                    }
+
+                    // crear usuario admin
+                    let admin = new Parse.User();
+                    admin.set("username", $scope.initialize.user);
+                    admin.set("password", $scope.initialize.password);
+                    const adminUser = await admin.signUp();
+                    $scope.logs.list.push("Created Admin user");
+
+                    // crear rol admin
+                    let roleACL = new Parse.ACL();
+                    roleACL.setPublicReadAccess(true);
+                    roleACL.setWriteAccess(adminUser.id, true);
+                    adminRole = new Parse.Role("Admin", roleACL);
+                    adminRole.getUsers().add(adminUser);
+                    adminRole = await adminRole.save();
+                    $scope.logs.list.push("Created Admin role");
+
+                    // crear ACL, public read, admin write
+                    const adminACL = new Parse.ACL();
+                    adminACL.setPublicReadAccess(true);
+                    adminACL.setRoleWriteAccess(adminRole, true);
+
+                    // crear categoria
+                    const Category = Parse.Object.extend("Category");
+                    let category1 = new Category();
+                    category1.set("name", "Category 1");
+                    category1.setACL(adminACL);
+                    category1 = await category1.save();
+                    $scope.logs.list.push("Created Category 1");
+                    let category2 = new Category();
+                    category2.set("name", "Category 2");
+                    category2.setACL(adminACL);
+                    category2 = await category2.save();
+                    $scope.logs.list.push("Created Category 2");
+
+                    // crear herramienta
+                    const Tool = Parse.Object.extend("Tool");
+                    let tool = new Tool();
+                    tool.set("name", "Google");
+                    tool.set("search", "google");
+                    tool.set("url", "https://google.com");
+                    tool.set("views", 0);
+                    tool.set("plan", "Free");
+                    tool.set("categories", [category1, category2]);
+                    tool.setACL(adminACL);
+                    await tool.save();
+                    $scope.logs.list.push("Created Tool");
+
+                    // crear sugerencia
+                    const Suggestion = Parse.Object.extend("Suggestion");
+                    let suggestion = new Suggestion();
+                    suggestion.set("content", "This App is awesome!");
+                    suggestion.setACL(adminACL);
+                    await suggestion.save();
+                    $scope.logs.list.push("Created Suggestion");
+                    $scope.$apply();
+                }
+                $scope.migrate = {
+                    from: {
+                        url: "",
+                        appid: "",
+                        jsid: ""
+                    },
+                    to: {
+                        url: "",
+                        appid: "",
+                        jsid: undefined
+                    }
+                };
+                $scope.migrate.start = async () => {
+                    localStorage.clear();
+                    // conectar al servidor anterior
+                    connect($scope.migrate.from.url, $scope.migrate.from.appid, $scope.migrate.from.jsid)
+
+                    // traer categorias
+                    let fromCategories = await new Parse.Query("Category")
+                        .limit(1000)
+                        .find();
+                    $scope.logs.list.push(`Got ${fromCategories.length} categories`);
+
+                    // traer herramientas
+                    let fromTools = await new Parse.Query("Tool")
+                        .limit(1000)
+                        .include("categories")
+                        .find();
+                    $scope.logs.list.push(`Got ${fromTools.length} tools`);
+
+                    // traer sugerencias
+                    let fromSuggestions = await new Parse.Query("Suggestion")
+                        .limit(1000)
+                        .find();
+                    $scope.logs.list.push(`Got ${fromSuggestions.length} suggestions`);
+
+                    // cambiar al servidor nuevo
+                    connect($scope.migrate.to.url, $scope.migrate.to.appid, $scope.migrate.to.jsid)
+
+                    // traer el admin role
+                    let adminRole = await new Parse.Query(Parse.Role)
+                        .equalTo("name", "Admin")
+                        .first()
+
+                    // armar el acl
+                    const adminACL = new Parse.ACL();
+                    adminACL.setPublicReadAccess(true);
+                    adminACL.setRoleWriteAccess(adminRole, true);
+
+                    // clases
+                    const Suggestion = Parse.Object.extend("Suggestion");
+                    const Tool = Parse.Object.extend("Tool");
+                    const Category = Parse.Object.extend("Category");
+
+                    // armar y guardar sujerencias 
+                    let newSuggestions = [];
+                    fromSuggestions.forEach((_suggestion) => {
+                        let suggestion = new Suggestion();
+                        suggestion.set("content", _suggestion.get("content"));
+                        suggestion.setACL(adminACL);
+                        newSuggestions.push(suggestion);
+                    });
+                    await Parse.Object.saveAll(newSuggestions);
+                    $scope.logs.list.push("Saved new suggestions");
+
+                    // armar y guardar categorias
+                    let newCategories = [];
+                    fromCategories.forEach((_category) => {
+                        let category = new Category();
+                        category.set("name", _category.get("name"));
+                        category.setACL(adminACL);
+                        newCategories.push(category)
+                    })
+                    newCategories = await Parse.Object.saveAll(newCategories);
+                    $scope.logs.list.push("Saved new categories");
+
+                    // armar y guardar herramientas
+                    const searchNewCategory = (name) => {
+                        let result;
+                        newCategories.forEach((category) => {
+                            if (category.get("name") === name) result = category;
+                        })
+                        return result;
+                    }
+                    let newTools = [];
+                    fromTools.forEach((_tool) => {
+                        let tool = new Tool();
+                        tool.set("name", _tool.get("name"));
+                        tool.set("search", _tool.get("search"));
+                        tool.set("plan", _tool.get("plan"));
+                        tool.set("url", _tool.get("url"));
+                        tool.set("views", _tool.get("views"));
+                        let currentNewCategories = [];
+                        _tool.get("categories").forEach((_category) => {
+                            currentNewCategories.push(searchNewCategory(_category.get("name")))
+                        });
+                        tool.set("categories", currentNewCategories);
+                        tool.setACL(adminACL);
+                        newTools.push(tool)
+                    })
+                    await Parse.Object.saveAll(newTools);
+                    $scope.logs.list.push("Saved new tools");
+                    $scope.$apply();
+                }
+
+            });
+    </script>
+
+</body>
+
+</html>
