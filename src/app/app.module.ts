@@ -35,6 +35,7 @@ import { CategoriesComponent } from './manager/categories/categories.component';
 import { SuggestionsComponent } from './manager/suggestions/suggestions.component';
 import { SuggestionDialogComponent } from './suggestion-dialog/suggestion-dialog.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AlertDialogComponent } from './manager/alert-dialog/alert-dialog.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { HttpClientModule } from '@angular/common/http';
     ConfirmDialogComponent,
     CategoriesComponent,
     SuggestionsComponent,
-    SuggestionDialogComponent
+    SuggestionDialogComponent,
+    AlertDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -80,6 +82,6 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [LoginComponent, ConfirmDialogComponent, SuggestionDialogComponent]
+  entryComponents: [LoginComponent, ConfirmDialogComponent, SuggestionDialogComponent, AlertDialogComponent]
 })
 export class AppModule { }

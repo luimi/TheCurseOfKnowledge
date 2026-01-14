@@ -7,7 +7,8 @@ import Parse from 'parse';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
 import { UtilsService } from 'src/app/utils.service';
-import {CdkDragDrop, moveItemInArray} from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { AlertDialogComponent } from '../alert-dialog/alert-dialog.component';
 
 @Component({
   selector: 'app-tools',
@@ -25,7 +26,7 @@ export class ToolsComponent implements OnInit {
   filter: any = { name: '', chips: [] };
   formControl = new FormControl();
   currentTool: any = {};
-  plans = ["Free","paid","Freemium","Trial"];
+  plans = ["Free", "paid", "Freemium", "Trial"];
   constructor(public dialog: MatDialog, public utils: UtilsService) {
     this.filteredCategories = this.formControl.valueChanges.pipe(
       startWith(null),
@@ -65,7 +66,7 @@ export class ToolsComponent implements OnInit {
     let filterValue = ((value instanceof Object) ? value.get('name') : value).toLowerCase();
     return this.categories.filter(category => {
       let startWith = category.get('name').toLowerCase().indexOf(filterValue) === 0
-      let mappedSelected = this.currentTool.categories.map((val,i,a) => val.get('name').toLowerCase());
+      let mappedSelected = this.currentTool.categories.map((val, i, a) => val.get('name').toLowerCase());
       let alreadySelected = !mappedSelected.includes(category.get('name').toLowerCase())
       return startWith && alreadySelected
     });
@@ -82,36 +83,44 @@ export class ToolsComponent implements OnInit {
     this.currentTool = { categories: [] };
   }
   async save() {
-    if (this.currentTool.name) {
-      let tool;
-      if (this.currentTool.saved) {
-        tool = this.currentTool.saved;
-      } else {
-        const Tool = Parse.Object.extend('Tool');
-        tool = new Tool();
-        tool.setACL(await this.utils.getAdminACL());
-      }
-      tool.set("name", this.currentTool.name);
-      tool.set("search", this.currentTool.name.toLowerCase());
-      tool.set("url", this.currentTool.url);
-      tool.set("categories", this.currentTool.categories);
-      tool.set("plan", this.currentTool.plan);
-      //this.currentTool.saved.set("name",this.currentTool.name);
-      await tool.save();
-      this.newTool();
-      this.search();
+    const { name, url, categories, plan, saved } = this.currentTool
+    if (!name || !url || categories.length === 0 || !plan) {
+      this.dialog.open(AlertDialogComponent, {data: {message : 'All data is required'}})
+      return
     }
+    let tool;
+    if (saved) {
+      tool = saved;
+    } else {
+      const exists = await new Parse.Query("Tool").equalTo("search", name.toLowerCase()).first();
+      if(exists) {
+        this.dialog.open(AlertDialogComponent, {data: {message : 'A tool with this name alredy exists'}})
+        return
+      }
+      const Tool = Parse.Object.extend('Tool');
+      tool = new Tool();
+      tool.setACL(await this.utils.getAdminACL());
+    }
+    tool.set("name", name);
+    tool.set("search", name.toLowerCase());
+    tool.set("url", url);
+    tool.set("categories", categories);
+    tool.set("plan", plan);
+    //this.currentTool.saved.set("name",this.currentTool.name);
+    await tool.save();
+    this.newTool();
+    this.search();
   }
-  delete(tool){
-    const dialogRef = this.dialog.open(ConfirmDialogComponent,{data:{message:'Do you want to delete this tool?'}});
-    dialogRef.afterClosed().subscribe( async result => {
-      if(result){
+  delete(tool) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, { data: { message: 'Do you want to delete this tool?' } });
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result) {
         await tool.destroy();
         this.search();
       }
     });
   }
-  swap(evt){
+  swap(evt) {
     moveItemInArray(this.currentTool.categories, evt.previousIndex, evt.currentIndex);
     console.log(evt);
   }
